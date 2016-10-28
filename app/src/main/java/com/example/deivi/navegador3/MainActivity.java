@@ -24,7 +24,6 @@ public class MainActivity extends AppCompatActivity {
     AutoCompleteTextView tv;
     EjemploBD db;
     ArrayAdapter<String> adapter;
-    String[] historial;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,9 +37,11 @@ public class MainActivity extends AppCompatActivity {
 
         wv.setWebViewClient(new WebViewClient() {
             public void onPageStarted(WebView ue, String url, Bitmap e){
-                //guardaPrevious(url);
                 tv.setText(url);
+            }
+            public void onReceivedError(WebView view, int errorCode, String description, String failingUrl) {
 
+                Toast.makeText(getApplicationContext(), "ERROR CARGANDO", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -61,8 +62,7 @@ public class MainActivity extends AppCompatActivity {
         actualizaAdapter();
         tv.setAdapter(adapter);
 
-        historial = new String[2];
-        //Toast.makeText(getApplicationContext(), ""+str[v.size()-3], Toast.LENGTH_SHORT).show();
+        //Toast.makeText(getApplicationContext(), "", Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -81,18 +81,33 @@ public class MainActivity extends AppCompatActivity {
 
         switch(id){
             case R.id.btHome:     wv.loadUrl("https://www.google.es");break;
-            case R.id.btPrev:     break;
-            case R.id.btNext:     break;
+            case R.id.btPrev:     goBack();break;
+            case R.id.btNext:     goForward();break;
             case R.id.btReload:   wv.reload();break;
             case R.id.btSearch:   searchWeb();break;
+            case R.id.btBorrar:   borrarHistorial();break;
         }
         return super.onOptionsItemSelected(item);
     }
 
     public void searchWeb(){
-        wv.loadUrl(tv.getText().toString());
+        String url = tv.getText().toString();
+        Toast.makeText(getApplicationContext(), ""+url.substring(0,4), Toast.LENGTH_SHORT).show();
+        if(url.substring(0,4).equals("http")){
+            Toast.makeText(getApplicationContext(), "YES", Toast.LENGTH_SHORT).show();
+            wv.loadUrl(url);
+        }else{
+            wv.loadUrl("http://"+url);
+        }
+
         guardaUrl(tv.getText().toString());
         actualizaAdapter();
+    }
+
+    public void borrarHistorial(){
+        db.borraTodo();
+        actualizaAdapter();
+        Toast.makeText(getApplicationContext(), "HISTORIAL BORRADO", Toast.LENGTH_SHORT).show();
     }
 
     public void guardaUrl(String url){
@@ -107,5 +122,16 @@ public class MainActivity extends AppCompatActivity {
         }
 
         adapter = new ArrayAdapter<String>(this, android.R.layout.simple_dropdown_item_1line, str);
+        tv.setAdapter(adapter);
+    }
+
+    public void goBack(){
+        if(wv.canGoBack())
+            wv.goBack();
+    }
+
+    public void goForward(){
+        if(wv.canGoForward())
+            wv.goForward();
     }
 }

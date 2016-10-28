@@ -32,4 +32,10 @@
         android:title="Search"
         app:showAsAction="always"
         android:id="@+id/btSearch" />
+    <item
+        android:icon="@android:drawable/ic_menu_delete"
+        android:orderInCategory="100"
+        android:title="Limpiar_Historial"
+        app:showAsAction="always"
+        android:id="@+id/btBorrar" />
 </menu>

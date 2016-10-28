@@ -3,6 +3,7 @@ package com.example.deivi.navegador3;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
@@ -34,18 +35,31 @@ public class EjemploBD extends SQLiteOpenHelper {
 
     public long agregar(String nombre){
         SQLiteDatabase db = this.getWritableDatabase();
+        long newRowId=-1;
+        if(!existe(nombre)) {
+            ContentValues values = new ContentValues();
 
-        ContentValues values = new ContentValues();
-
-        values.put(COLUMNA_NOMBRE, nombre);
-
-        long newRowId;
-        newRowId = db.insert(TABLA_NOMBRES, null,values);
+            values.put(COLUMNA_NOMBRE, nombre);
 
 
-        //newRowId = db.insert("Kyoda");
-        db.close();
+            newRowId = db.insert(TABLA_NOMBRES, null, values);
+
+
+            //newRowId = db.insert("Kyoda");
+            db.close();
+        }
         return newRowId;
+
+    }
+
+    public boolean existe(String nombre){
+        SQLiteDatabase db = this.getWritableDatabase();
+        Vector v = obtenerSugerencias();
+        for(int i=0; i<v.size(); i++){
+            if(nombre.equals(v.get(i).toString()))
+                return true;
+        }
+        return false;
     }
 
     public String obtener(int id){
@@ -68,6 +82,15 @@ public class EjemploBD extends SQLiteOpenHelper {
         db.close();
         return cursor.getString(1);
 
+    }
+
+    public boolean borraTodo(){
+        SQLiteDatabase db = this.getWritableDatabase();
+        try{
+            db.execSQL("DELETE FROM "+TABLA_NOMBRES);
+            return true;
+        }catch(SQLException e){}
+        return false;
     }
 
     public boolean eliminar(int id) {
@@ -93,8 +116,8 @@ public class EjemploBD extends SQLiteOpenHelper {
 
             c = db.query(TABLA_NOMBRES, campos, null, null, null, null, null, null);
 
-            if(c != null){
-                c.moveToFirst();
+            if(c != null && c.moveToFirst()){
+
                 do{
                     v.add(c.getString(1));
                 }while(c.moveToNext());
