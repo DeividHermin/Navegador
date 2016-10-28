@@ -1,0 +1,35 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.example.deivi.navegador3.MainActivity">
+    <item
+        android:icon="@android:drawable/ic_media_previous"
+        android:orderInCategory="100"
+        android:title="Previous"
+        app:showAsAction="always"
+        android:id="@+id/btPrev" />
+    <item
+        android:icon="@android:drawable/ic_media_next"
+        android:orderInCategory="100"
+        android:title="Next"
+        app:showAsAction="always"
+        android:id="@+id/btNext" />
+    <item
+        android:icon="@android:drawable/ic_menu_myplaces"
+        android:orderInCategory="100"
+        android:title="Home"
+        app:showAsAction="always"
+        android:id="@+id/btHome" />
+    <item
+        android:icon="@android:drawable/ic_popup_sync"
+        android:orderInCategory="100"
+        android:title="Reload"
+        app:showAsAction="always"
+        android:id="@+id/btReload" />
+    <item
+        android:icon="@android:drawable/ic_menu_search"
+        android:orderInCategory="100"
+        android:title="Search"
+        app:showAsAction="always"
+        android:id="@+id/btSearch" />
+</menu>
