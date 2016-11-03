@@ -92,9 +92,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void searchWeb(){
         String url = tv.getText().toString();
-        Toast.makeText(getApplicationContext(), ""+url.substring(0,4), Toast.LENGTH_SHORT).show();
         if(url.substring(0,4).equals("http")){
-            Toast.makeText(getApplicationContext(), "YES", Toast.LENGTH_SHORT).show();
             wv.loadUrl(url);
         }else{
             wv.loadUrl("http://"+url);
